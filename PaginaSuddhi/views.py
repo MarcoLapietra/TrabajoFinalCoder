@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from .models import *
 from django.http import HttpResponse
-
+from Productos.views import *
+from Productos.models import *
 
 
 # Create your views here.
@@ -20,3 +21,8 @@ def tinturas_madre(req):
 
 def cursos(req):
     return render(req, "cursos.html")
+
+
+
+def todos_productos(req):
+    return render(req,"vista_productos.html")
