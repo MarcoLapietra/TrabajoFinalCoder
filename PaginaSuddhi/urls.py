@@ -15,8 +15,11 @@ urlpatterns = [
     path('list_prod', list_prod, name ="ListProd"),
     path('login/', loginView, name="Login"),
     path('register/', register, name="Registrar"),
-    path('logout/', LogoutView.as_view(template_name="logout.html"), name="Logout"),
+    path('logout/', LogoutView.as_view(template_name="inicio.html"), name="Logout"),
     path('editar-pefil/', editar_perfil, name="EditarPefil"),
     path('agregar-avatar/', agregar_avatar, name="AgregarAvatar"),
+    path('about/', about, name="About"),
+    path('contacto/', contacto, name="Contacto"),
+
 
 ]

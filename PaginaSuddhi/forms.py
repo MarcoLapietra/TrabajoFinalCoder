@@ -4,6 +4,19 @@ from django.contrib.auth.models import User
 from .models import *
 
 
+
+
+
+
+class ClienteFormulario(forms.ModelForm):
+
+    class Meta:
+        model=Cliente
+        fields = ("nombre","telefono","direccion","email")
+
+
+
+
 class UserEditForm(UserChangeForm):
 
     password = forms.CharField(
@@ -26,7 +39,7 @@ class UserEditForm(UserChangeForm):
         password2 = self.cleaned_data["password2"]
 
         if password1 != password2:
-            raise forms.ValidationError("Las contraseñas no coinciden!!!!")
+            raise forms.ValidationError("Las contraseñas no coinciden")
         return password2
     
 class AvatarFormulario(forms.ModelForm):

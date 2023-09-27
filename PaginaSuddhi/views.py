@@ -37,7 +37,17 @@ def cursos(req):
 def todos_productos(req):
     return render(req,"vista_productos.html")
 
+def about(req):
+    return render(req,"about.html")
 
+
+def contacto(req):
+    return render(req,"contacto.html")
+
+
+
+
+#Login
 
 
 def loginView(req):
@@ -105,6 +115,44 @@ def editar_perfil(req):
         miFormulario = UserEditForm(instance=usuario)
         return render(req, "editarPerfil.html", {"miFormulario": miFormulario})
     
+def crea_cliente(req):
+
+    if req.method == 'POST':
+
+        info = req.POST
+
+        miFormulario = ClienteFormulario({
+            "nombre": info["nombre"],
+            "apellido": info["apellido"],
+            "email": info["email"]
+        })
+        userForm = UserCreationForm({
+            "username": info["username"],
+            "password1": info["password1"],
+            "password2": info["password2"]
+        })
+
+        if miFormulario.is_valid() and userForm.is_valid():
+
+            data = miFormulario.cleaned_data
+            data.update(userForm.cleaned_data)
+
+            user = User(username=data["username"])
+            user.set_password(data["password1"])
+            user.save()
+
+            estudiante = Cliente(nombre=data["nombre"], apellido=data["apellido"], email=data["email"], user=user)
+            estudiante.save() 
+
+            return render(req, "inicio.html", {"mensaje": "Estudiante creado con éxito!"})
+    else:
+
+        miFormulario = ClienteFormulario()
+        userForm = UserCreationForm()
+        return render(req, "registro.html", {"miFormulario": miFormulario, "userForm": userForm})
+    
+
+
 def agregar_avatar(req):
 
     if req.method == 'POST':
@@ -124,4 +172,9 @@ def agregar_avatar(req):
     else:
         miFormulario = AvatarFormulario()
         return render(req, "agregarAvatar.html", {"miFormulario": miFormulario})
+        
         return render(req, "registro.html", {"miFormulario": miFormulario})
+    
+
+
+    
