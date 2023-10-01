@@ -1,0 +1,24 @@
+{% extends 'padre.html' %}
+
+
+{% block contenidoQueCambia %}
+
+<h1>Resultados de busqueda</h1>
+
+<form method="get">
+    {{ form.as_p }}
+    <button id="siteSearchSubmit" class="siteSearchSubmit" type="submit"></button>
+</form>
+
+{% if results %}
+    <h2>Resultados:</h2>
+    <ul>
+        {% for producto in results %}
+            <li>{{ producto.nombre }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No se encontraron.</p>
+{% endif %}
+    
+{% endblock contenidoQueCambia %}

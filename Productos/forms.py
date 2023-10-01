@@ -1,5 +1,5 @@
 from django import forms
-
+from .models import *
 
 class ProductoFormulario(forms.Form):
     nombre = forms.CharField(required=True)
@@ -8,3 +8,12 @@ class ProductoFormulario(forms.Form):
 
 
     
+
+    
+
+
+class ProductoForm(forms.ModelForm):
+    class Meta:
+        model = Producto
+        fields = ['titulo', 'descripcion', 'precio', 'imagen']
+

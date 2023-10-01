@@ -1,0 +1,61 @@
+{% extends 'padre.html' %}
+
+
+
+
+{% load static %}
+
+
+{% block contenidoQueCambia %}
+
+<title>Acondicionador Sólido</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            padding: 20px;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        img {
+            max-width: 30%;
+            height: auto;
+        }
+
+        .whatsapp-logo {
+            width: 50px; 
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Jabon de aceite de oliva</h1>
+        <p>Espirulina, romero , árbol de té y cuarzo crista</p>
+        <img src="{% static 'images/jabon_espirulina.jpeg' %}" alt="Jabon espirulina">
+        <p>hidrata cua rea, ideal para pieles secas y el invierno</p>
+        {% if user.is_authenticated %}
+        <a href="https://wa.me/+541139304608" target="_blank">
+            <img class="whatsapp-logo" src="{% static 'images/whatsapp-logo.png' %}" alt="Logo de WhatsApp">
+        </a>
+        {% endif %}
+    
+    
+{% endblock contenidoQueCambia %}
+    
+
+    
+
+    

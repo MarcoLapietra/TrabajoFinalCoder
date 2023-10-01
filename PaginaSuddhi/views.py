@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView, UpdateView, CreateView
@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
+from django.contrib import messages
 from .models import *
 from django.http import HttpResponse
 from Productos.views import *
@@ -16,6 +17,87 @@ from .forms import *
 
 
 # Create your views here.
+
+
+def registro(request):
+    if request.method == 'POST':
+        user_form = RegistroForm(request.POST)
+        
+        if user_form.is_valid():
+            
+            user = user_form.save(commit=False)
+            user.set_password(user_form.cleaned_data['password1'])
+            user.save()
+
+            
+            login(request, user)
+            
+            return redirect('Inicio')  
+
+    else:
+        user_form = RegistroForm()
+    
+    return render(request, 'registro.html', {'user_form': user_form})
+
+
+
+def inicio_sesion(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('Inicio')
+        else:
+            messages.error(request, 'Inicio de sesión fallido. Por favor, verifica tus credenciales.')
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'login.html', {'form': form})
+
+
+def cerrar_sesion(request):
+    logout(request)
+    return render(request, template_name='inicio.html')
+
+
+
+@login_required
+def eliminar_cuenta(request):
+    if request.method == 'POST':
+        user = request.user
+        user.delete()
+        messages.success(request, 'Tu cuenta ha sido eliminada exitosamente.')
+        return redirect('Inicio') 
+    return render(request, 'eliminar_cuenta.html')
+
+
+def editar_perfil(req):
+
+    usuario = req.user
+    if req.method == 'POST':
+
+        miFormulario = UserEditForm(req.POST, instance=req.user)
+
+        if miFormulario.is_valid():
+            
+            data = miFormulario.cleaned_data
+            usuario.first_name = data["first_name"]
+            usuario.last_name = data["last_name"]
+            usuario.email = data["email"]
+            usuario.set_password(data["password1"])
+            usuario.save()
+
+            return render(req, "inicio.html", {"mensaje": "Datos actualizados con éxito!"})
+        else:
+            return render(req, "editarPerfil.html", {"miFormulario": miFormulario})
+
+    else:
+        miFormulario = UserEditForm(instance=usuario)
+        return render(req, "editarperfil.html", {"miFormulario": miFormulario})
+
+
+    
 
 def inicio(req):
     return render(req, "inicio.html") 
@@ -47,110 +129,6 @@ def contacto(req):
 
 
 
-#Login
-
-
-def loginView(req):
-
-    if req.method == 'POST':
-
-        miFormulario = AuthenticationForm(req, data=req.POST)
-
-        if miFormulario.is_valid():
-
-            data = miFormulario.cleaned_data
-            usuario = data["username"]
-            psw = data["password"]
-
-            user = authenticate(username=usuario, password=psw)
-            if user:
-                login(req, user)
-                return render(req, "inicio.html", {"mensaje": f"Bienvenido {usuario}!"})
-            
-        return render(req, "inicio.html", {"mensaje": f"Datos incorrectos"})
-    else:
-        miFormulario = AuthenticationForm()
-        return render(req, "login.html", {"miFormulario": miFormulario})
-
-def register(req):
-
-    if req.method == 'POST':
-
-        miFormulario = UserCreationForm(req.POST)
-
-        if miFormulario.is_valid():
-
-            data = miFormulario.cleaned_data
-            usuario = data["username"]
-            miFormulario.save()
-            return render(req, "inicio.html", {"mensaje": f"Usuario {usuario} creado con éxito!"})
-
-        return render(req, "inicio.html", {"mensaje": f"Formulario invalido"})
-            
-    else:
-        miFormulario = UserCreationForm()
-        return render(req, "registro.html", {"miFormulario": miFormulario})
-
-def editar_perfil(req):
-
-    usuario = req.user
-    if req.method == 'POST':
-
-        miFormulario = UserEditForm(req.POST, instance=req.user)
-
-        if miFormulario.is_valid():
-            
-            data = miFormulario.cleaned_data
-            usuario.first_name = data["first_name"]
-            usuario.last_name = data["last_name"]
-            usuario.email = data["email"]
-            usuario.set_password(data["password1"])
-            usuario.save()
-
-            return render(req, "inicio.html", {"mensaje": "Datos actualizados con éxito!"})
-        else:
-            return render(req, "editarPerfil.html", {"miFormulario": miFormulario})
-
-    else:
-        miFormulario = UserEditForm(instance=usuario)
-        return render(req, "editarPerfil.html", {"miFormulario": miFormulario})
-    
-def crea_cliente(req):
-
-    if req.method == 'POST':
-
-        info = req.POST
-
-        miFormulario = ClienteFormulario({
-            "nombre": info["nombre"],
-            "apellido": info["apellido"],
-            "email": info["email"]
-        })
-        userForm = UserCreationForm({
-            "username": info["username"],
-            "password1": info["password1"],
-            "password2": info["password2"]
-        })
-
-        if miFormulario.is_valid() and userForm.is_valid():
-
-            data = miFormulario.cleaned_data
-            data.update(userForm.cleaned_data)
-
-            user = User(username=data["username"])
-            user.set_password(data["password1"])
-            user.save()
-
-            estudiante = Cliente(nombre=data["nombre"], apellido=data["apellido"], email=data["email"], user=user)
-            estudiante.save() 
-
-            return render(req, "inicio.html", {"mensaje": "Estudiante creado con éxito!"})
-    else:
-
-        miFormulario = ClienteFormulario()
-        userForm = UserCreationForm()
-        return render(req, "registro.html", {"miFormulario": miFormulario, "userForm": userForm})
-    
 
 
 def agregar_avatar(req):
@@ -173,8 +151,47 @@ def agregar_avatar(req):
         miFormulario = AvatarFormulario()
         return render(req, "agregarAvatar.html", {"miFormulario": miFormulario})
         
-        return render(req, "registro.html", {"miFormulario": miFormulario})
     
 
 
-    
+def buscar(req):
+    form = BusquedaProd(req.GET)
+    Resultados = []
+
+    if form.is_valid():
+        query = form.cleaned_data['query']
+        Resultados = Producto.objects.filter(titulo__icontains=query) 
+
+    return render(req, 'busqueda.html', {'form': form, 'results': Resultados})
+
+
+
+
+
+@login_required
+def contacto(req):
+    if not req.user.is_authenticated:
+        return redirect('login.html') 
+
+    if req.method == 'POST':
+        form = ContactForm(req.POST)
+        if form.is_valid():
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            ContactRequest.objects.create(user=req.user, subject=subject, message=message)
+            messages.success(req, 'Tu solicitud de contacto a sido enviada de forma exitosa.')
+            return redirect('contact.html')
+
+    else:
+        form = ContactForm()
+
+    return render(req, 'contact.html', {'form': form})
+
+
+
+
+
+
+
+
+

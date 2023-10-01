@@ -1,33 +1,96 @@
-from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import DeleteView, UpdateView, CreateView
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.models import User
+from django.contrib import messages
 from .models import *
+from django.http import HttpResponse
+from Productos.views import *
+from Productos.models import *
 from .forms import *
+from PaginaSuddhi.models import Cliente
+
 
 # Create your views here.
 
+    
 
-def crea_producto(req):
-    if req.method == 'POST':
 
-        ProductForm = ProductoFormulario(req.POST)
+def agregar_producto(request):
+    if not request.user.is_authenticated or not request.user:
+        
+        return redirect('Inicio')
 
-        if ProductForm.is_valid():
-
-            datos = ProductForm.cleaned_data
-
-            producto = Producto(nombre=datos["nombre"], tipo=datos["tipo"])
-            producto.save()
-            return render(req,"inicio.html", {"mensaje : Producto creado con exito"})
-        else:
-            return render(req,"inicio.html", {"mensaje : Error al crear el producto"})
+    if request.method == 'POST':
+        form = ProductoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('Inicio')
     else:
-        ProductForm = ProductoFormulario()
-        return render(req, 'crea_producto.html', {"ProductForm":ProductForm})
+        form = ProductoForm()
+
+    return render(request, 'agregar_producto.html', {'form': form})
+
+
+
+
+
+
+def listar_productos(request):
+    productos = Producto.objects.all()
+    return render(request, 'listar_productos.html', {'productos': productos})
+
+
+
+
+
+def aco_lav(req):
+    return render(req, "acond_lavanda.html") 
+
+
+def jab_arc(req):
+    return render(req, "jabon_arcilla.html") 
+
+
+def jab_esp(req):
+    return render(req, "jabon_espirulina.html") 
+
+
+
+def lub_nat(req):
+    return render(req, "lubricante_natural.html") 
+
+
+def prot_sol(req):
+    return render(req, "protector_solar.html") 
+
+
+def sha_sol(req):
+    return render(req, "shampoo_solido.html") 
+
+
+def ung_arn(req):
+    return render(req, "unguento_arnica.html") 
+
+
+def ung_can(req):
+    return render(req, "unguento_canabis.html") 
+
+
+
+@login_required
+def eliminar_producto(request, producto_id):
+    producto = get_object_or_404(Producto, pk=producto_id)
+    usuario=request.user
+    if request.method == 'POST':
+        if request.user.is_authenticated and request.user.is_superuser:
+            producto.delete()
+            return redirect('ListProd')
     
-
-
-
-def list_prod(req):
-    producto = Producto.objects.all()
-    return render(req, "productos.html", {"productos":producto})
-    
+    return render(request, 'eliminar_producto.html', {'producto': producto})

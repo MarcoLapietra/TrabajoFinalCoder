@@ -6,19 +6,16 @@ from django.contrib.auth.models import User
 
 class Cliente(models.Model):
     nombre = models.CharField(max_length=50)
-    telefono= models.IntegerField()
-    direccion=models.TextField()
-    email=models.EmailField(default=None)
+    email=models.EmailField(default=None, blank=True, null=True)
 
     def __str__(self):
         return self.nombre
     
 
-class Productos(models.Model):
-    nombre=models.CharField(max_length=30)
-    descripcion=models.TextField
-    foto=models.ImageField
-    
+   
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
 
 
 
@@ -26,6 +23,21 @@ class Avatar(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     imagen = models.ImageField(upload_to='avatares', blank=True, null=True)
+
+
+
+
+
+
+
+class ContactRequest(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    subject = models.CharField(max_length=100)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.subject
 
 
 

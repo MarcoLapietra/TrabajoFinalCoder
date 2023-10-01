@@ -1,0 +1,55 @@
+{% extends 'padre.html' %}
+
+
+
+
+{% load static %}
+
+
+{% block contenidoQueCambia %}
+
+<title>Acondicionador Sólido</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            padding: 20px;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        img {
+            max-width: 30%;
+            height: auto;
+        }
+
+        .whatsapp-logo {
+            width: 50px; 
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ungüento de arnica</h1>
+       
+        <img src="{% static 'images/unguento_arnica.jpeg' %}" alt="Unguento arnica">
+        <p>Antiinflamatoria y analgésica, estimula la circulación sanguínea  </p>
+        {% if user.is_authenticated %}
+        <a href="https://wa.me/+541139304608" target="_blank">
+            <img class="whatsapp-logo" src="{% static 'images/whatsapp-logo.png' %}" alt="Logo de WhatsApp">
+        </a>
+        {% endif %}
+    
+{% endblock contenidoQueCambia %}

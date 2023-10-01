@@ -2,17 +2,27 @@ from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
 from .models import *
+from django.contrib.auth.forms import UserCreationForm
 
 
 
 
 
-
-class ClienteFormulario(forms.ModelForm):
+class RegistroForm(UserCreationForm):
+    username = forms.CharField(label='Nombre de usuario')
+    email = forms.EmailField(label='Correo electrónico')
+    password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Confirmar contraseña', widget=forms.PasswordInput)
 
     class Meta:
-        model=Cliente
-        fields = ("nombre","telefono","direccion","email")
+        model = User
+        fields = ('username', 'password1', 'password2', 'email')
+class ClienteForm(forms.ModelForm):
+    class Meta:
+        model = Cliente
+        fields = ()
+
+
 
 
 
@@ -47,3 +57,26 @@ class AvatarFormulario(forms.ModelForm):
     class Meta:
         model = Avatar
         fields = ("imagen",)
+
+
+
+
+class BusquedaProd(forms.Form):
+    query = forms.CharField(max_length=100)
+
+
+
+
+
+
+
+
+
+class ContactForm(forms.Form):
+    subject = forms.CharField(max_length=100)
+    message = forms.CharField(widget=forms.Textarea)
+
+
+
+
+

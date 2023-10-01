@@ -1,10 +1,17 @@
 {% extends 'padre.html' %}
 
 {% block contenidoQueCambia %}
-    <form action="{% url 'Login' %}" method="post">{% csrf_token %}
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
 
-        {{miFormulario.as_p}}
-
-        <button type="submit"> Ingresar </button>
-    </form>
+<form  method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Iniciar Sesión</button>
+</form>
 {% endblock contenidoQueCambia %}

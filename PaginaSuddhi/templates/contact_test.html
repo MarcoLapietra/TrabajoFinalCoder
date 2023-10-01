@@ -1,0 +1,12 @@
+{% extends "padre.html" %}
+
+{% block content %}
+<h1>Contact Us</h1>
+<p>Feel free to ask for more information:</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Send</button>
+</form>
+{% endblock %}

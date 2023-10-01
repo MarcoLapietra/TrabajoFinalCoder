@@ -1,10 +1,14 @@
 {% extends 'padre.html' %}
 
 {% block contenidoQueCambia %}
-    <form action="{% url 'Registrar' %}" method="post">{% csrf_token %}
+<h2>Registro de Usuario</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    {{ cliente_form.as_p }}
 
-        {{miFormulario.as_p}}
+    <button type="submit">Registrarse</button>
+  </form>
 
-        <button type="submit"> Crear </button>
-    </form>
+  <p>¿Ya tienes una cuenta? <a href="{% url 'Login' %}">Iniciar Sesión</a></p>
 {% endblock contenidoQueCambia %}

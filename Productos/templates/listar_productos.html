@@ -1,0 +1,20 @@
+{% extends "padre.html" %}
+
+{% block contenidoQueCambia %}
+<h2>Lista de Productos</h2>
+<ul>
+  {% for producto in productos %}
+    <li>
+      <strong>{{ producto.titulo }}</strong>
+      <p>{{ producto.descripcion }}</p>
+      <p>Precio: ${{ producto.precio }}</p>
+      <img src="{{ producto.imagen.url }}" alt="{{ producto.titulo }}" width="200">
+      {% if user.is_authenticated and request.user.is_superuser %}
+      <a href="{% url 'eliminar_producto' producto_id=producto.id %}" class="btn btn-danger">Eliminar</a>
+    {% endif %}
+    </li>
+  {% empty %}
+    <li>No se encontraron productos.</li>
+  {% endfor %}
+</ul>
+  {% endblock contenidoQueCambia %}
