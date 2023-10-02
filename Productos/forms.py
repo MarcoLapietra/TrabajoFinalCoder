@@ -20,4 +20,7 @@ class ProductoForm(forms.ModelForm):
 
 
         
-
+class EditarProductoForm(forms.ModelForm):
+    class Meta:
+        model = Producto
+        fields = ['titulo', 'descripcion', 'precio', 'imagen']

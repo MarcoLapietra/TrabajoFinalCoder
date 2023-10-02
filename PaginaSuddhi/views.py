@@ -67,26 +67,30 @@ def cerrar_sesion(request):
 
 
 
+@login_required
 def editar_perfil(request):
+    perfil_cliente = None 
+
     if request.method == 'POST':
         miFormulario = UserEditForm(request.POST, request.FILES, instance=request.user)
         if miFormulario.is_valid():
             usuario = miFormulario.save(commit=False)
             usuario.set_password(miFormulario.cleaned_data["password1"])
             usuario.save()
-            if request.user.is_authenticated:
-                return redirect('Inicio')  
-            else:
-               
-                from django.contrib.auth import login
-                login(request, usuario)
 
-            return redirect('Inicio')  
+            if hasattr(usuario, 'cliente'):
+                perfil_cliente = usuario.cliente
+
+            return redirect('Inicio')
         else:
             return render(request, "editarperfil.html", {"miFormulario": miFormulario})
     else:
         miFormulario = UserEditForm(instance=request.user)
-        return render(request, "editarperfil.html", {"miFormulario": miFormulario})
+
+        if hasattr(request.user, 'cliente'):
+            perfil_cliente = request.user.cliente
+
+    return render(request, "editarperfil.html", {"miFormulario": miFormulario, "perfil_cliente": perfil_cliente})
 
 
 
@@ -102,7 +106,6 @@ def eliminar_cuenta(request):
 
 
 
-# @login_required
 # def agregar_avatar(req):
 
 #     if req.method == 'POST':
@@ -111,18 +114,18 @@ def eliminar_cuenta(request):
 
 #         if miFormulario.is_valid():
             
-#             cliente = req.user.cliente
+#             data = miFormulario.cleaned_data
 
-#             avatar = miFormulario.save(commit=False)
-#             avatar.cliente = cliente
+#             avatar = Avatar(user=req.user, imagen=data["imagen"])
+
 #             avatar.save()
 
-#             return redirect("editarperfil.html", {"mensaje": "Avatar actualizados con éxito!"})
+#             return render(req, "inicio.html", {"mensaje": "Avatar actualizados con éxito!"})
 
 #     else:
 #         miFormulario = AvatarFormulario()
 #         return render(req, "agregarAvatar.html", {"miFormulario": miFormulario})
-        
+     
     
 
 #

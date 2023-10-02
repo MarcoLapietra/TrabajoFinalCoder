@@ -1,5 +1,6 @@
  {% load static %}
- 
+ {% load avatar_tags %}
+
  <!-- Navigation-->
  <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container px-4 px-lg-5">
@@ -38,9 +39,25 @@
                             
                     </ul>
                 </li>
-                {% if user.is_authenticated %}
-                <img src="{{ user.cliente.avatar.url }}" height="30px" alt="avatar">
-                </div>
+                
+                 {% if user.is_authenticated %}
+                     <div>
+                        
+                             
+                    
+                        
+                    {% avatar user 40 class="img-circle img-responsive" id="user_avatar" %}
+                        
+
+                     
+                
+                             
+                        </div>
+                  
+                 </div>
+                
+                              
+                    
                 <a class="fw-bolder" href="{% url 'EditarPefil' %}" >Bienvenid@ {{user.username}}</a>
                 <a class="btn btn-primary" href="{% url 'Logout' %}">Logout</a>
             {% else %}

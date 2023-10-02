@@ -1,0 +1,10 @@
+{% extends "padre.html" %}
+{% block contenidoQueCambia %}
+<h2>Editar Producto</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar Cambios</button>
+</form>
+<a href="{% url 'ListProd' %}">Volver a la lista de productos</a>
+{% endblock contenidoQueCambia %}

@@ -49,6 +49,22 @@ def listar_productos(request):
 
 
 
+@staff_member_required  
+def editar_producto(request, producto_id):
+    producto = get_object_or_404(Producto, id=producto_id)
+
+    if request.method == 'POST':
+        form = EditarProductoForm(request.POST, request.FILES, instance=producto)
+        if form.is_valid():
+            form.save()
+            return redirect('ListProd')
+    else:
+        form = EditarProductoForm(instance=producto)
+
+    return render(request, 'editar_producto.html', {'form': form, 'producto': producto})
+
+
+
 
 def aco_lav(req):
     return render(req, "acond_lavanda.html") 

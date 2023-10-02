@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
 from .models import *
 from django.contrib.auth.forms import UserCreationForm
-
+from django.core.files.images import get_image_dimensions
 
 
 
@@ -18,7 +18,7 @@ class RegistroForm(UserCreationForm):
  
     class Meta:
         model = User
-        fields = ('username', 'password1', 'password2', 'email',)
+        fields = ('username', 'password1', 'password2', 'email')
 class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente
@@ -29,8 +29,9 @@ class ClienteForm(forms.ModelForm):
 
 
 
+
 class UserEditForm(UserChangeForm):
-    avatar = forms.ImageField(required=False)
+    
 
     password = forms.CharField(
         help_text="",
@@ -43,7 +44,7 @@ class UserEditForm(UserChangeForm):
 
     class Meta:
         model=User
-        fields = ("email", "first_name", "last_name", "avatar", "password1", "password2",)
+        fields = ("email", "first_name", "last_name", "password1", "password2",)
 
     def clean_password2(self):
 
@@ -55,14 +56,10 @@ class UserEditForm(UserChangeForm):
         if password1 != password2:
             raise forms.ValidationError("Las contraseñas no coinciden")
         return password2
+        
     
 
 
-# class AvatarFormulario(forms.ModelForm):
-
-#     class Meta:
-#         model = Avatar
-#         fields = ("imagen",)
 
 
 
@@ -82,3 +79,8 @@ class ContactForm(forms.Form):
 
 
 
+# class AvatarFormulario(forms.ModelForm):
+
+#     class Meta:
+#         model = Avatar
+#         fields = ("imagen",)

@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth.views import LogoutView
 from django.conf import settings
 from django.conf.urls.static import static
@@ -14,14 +14,12 @@ urlpatterns = [
     path('cuidado_corporal', cuidado_corporal, name="CuidadoCorporal"),
     path('tinturas', tinturas_madre, name="Tinturas"),
     path('cursos', cursos, name="Cursos"),
-    path('productos', todos_productos, name="Productos"),
-    #path('crea_producto', crea_producto, name ="CrearProd"),
+    path('productos', todos_productos, name="Productos"),   
     path('login/', inicio_sesion, name="Login"),
     path('register/', registro, name="Registrar"),
     path('logout/', cerrar_sesion, name="Logout"),
     path('eliminar_cuenta/', eliminar_cuenta, name='eliminar_cuenta'),
     path('editar-pefil/', editar_perfil, name="EditarPefil"),
-   # path('agregar-avatar/', agregar_avatar, name="AgregarAvatar"),
     path('about/', about, name="About"),
     path('contacto/', contacto, name='Contacto'),
     path('buscar/', buscar, name="Buscar"),
@@ -38,6 +36,9 @@ urlpatterns = [
     path('listar_productos/', listar_productos, name='ListProd'),
     path('eliminar_producto/<int:producto_id>/', eliminar_producto, name='eliminar_producto'),
     path('detalle_producto/<int:producto_id>/',detalle_producto, name='detalle_producto'),
+    #path('agregarAvatar/',agregar_avatar, name='agregarAvatar'),
+    path('editar_producto/<int:producto_id>/', editar_producto, name='editar_producto'),
+    path('avatar/', include('avatar.urls')),
 
 
 ]

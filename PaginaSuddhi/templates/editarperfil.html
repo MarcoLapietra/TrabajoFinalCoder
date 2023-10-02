@@ -1,12 +1,22 @@
 {% extends 'padre.html' %}
 
 {% block contenidoQueCambia %}
-    <form action="{% url 'EditarPefil' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+<form action="{% url 'EditarPefil' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
 
-        {{miFormulario.as_p}}
-        {{ miFormulario.avatar}}
+    {{ miFormulario.as_p }}
+    
 
 
-        <button type="submit"> Actualizar </button>
-    </form>
+    <a href="{% url 'avatar_change' %}">Cambiar avatar</a>
+
+
+    <button type="submit">Actualizar</button>
+</form>
+
 {% endblock contenidoQueCambia %}
+
+
+
+
+"{% url 'EditarPefil' %}"
