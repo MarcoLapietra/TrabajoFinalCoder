@@ -17,6 +17,9 @@ from .forms import *
 
 
 # Create your views here.
+#
+#Parte Usuarios
+#
 
 
 def registro(request):
@@ -62,6 +65,31 @@ def cerrar_sesion(request):
 
 
 
+
+
+def editar_perfil(request):
+    if request.method == 'POST':
+        miFormulario = UserEditForm(request.POST, request.FILES, instance=request.user)
+        if miFormulario.is_valid():
+            usuario = miFormulario.save(commit=False)
+            usuario.set_password(miFormulario.cleaned_data["password1"])
+            usuario.save()
+            if request.user.is_authenticated:
+                return redirect('Inicio')  
+            else:
+               
+                from django.contrib.auth import login
+                login(request, usuario)
+
+            return redirect('Inicio')  
+        else:
+            return render(request, "editarperfil.html", {"miFormulario": miFormulario})
+    else:
+        miFormulario = UserEditForm(instance=request.user)
+        return render(request, "editarperfil.html", {"miFormulario": miFormulario})
+
+
+
 @login_required
 def eliminar_cuenta(request):
     if request.method == 'POST':
@@ -70,37 +98,44 @@ def eliminar_cuenta(request):
         messages.success(request, 'Tu cuenta ha sido eliminada exitosamente.')
         return redirect('Inicio') 
     return render(request, 'eliminar_cuenta.html')
-
-
-def editar_perfil(req):
-
-    usuario = req.user
-    if req.method == 'POST':
-
-        miFormulario = UserEditForm(req.POST, instance=req.user)
-
-        if miFormulario.is_valid():
-            
-            data = miFormulario.cleaned_data
-            usuario.first_name = data["first_name"]
-            usuario.last_name = data["last_name"]
-            usuario.email = data["email"]
-            usuario.set_password(data["password1"])
-            usuario.save()
-
-            return render(req, "inicio.html", {"mensaje": "Datos actualizados con éxito!"})
-        else:
-            return render(req, "editarPerfil.html", {"miFormulario": miFormulario})
-
-    else:
-        miFormulario = UserEditForm(instance=usuario)
-        return render(req, "editarperfil.html", {"miFormulario": miFormulario})
-
-
     
 
+
+
+# @login_required
+# def agregar_avatar(req):
+
+#     if req.method == 'POST':
+
+#         miFormulario = AvatarFormulario(req.POST, req.FILES)
+
+#         if miFormulario.is_valid():
+            
+#             cliente = req.user.cliente
+
+#             avatar = miFormulario.save(commit=False)
+#             avatar.cliente = cliente
+#             avatar.save()
+
+#             return redirect("editarperfil.html", {"mensaje": "Avatar actualizados con éxito!"})
+
+#     else:
+#         miFormulario = AvatarFormulario()
+#         return render(req, "agregarAvatar.html", {"miFormulario": miFormulario})
+        
+    
+
+#
+
+#
+#Renders 
+#
+
+
+
 def inicio(req):
-    return render(req, "inicio.html") 
+    return render(req, "inicio.html")
+
 
 
 
@@ -131,38 +166,26 @@ def contacto(req):
 
 
 
-def agregar_avatar(req):
 
-    if req.method == 'POST':
+def buscar(request):
+    query = request.GET.get('q')
+    productos = []
 
-        miFormulario = AvatarFormulario(req.POST, req.FILES)
+    if query:
+        productos = Producto.objects.filter(titulo__icontains=query)
 
-        if miFormulario.is_valid():
-            
-            data = miFormulario.cleaned_data
+    return render(request, 'busqueda.html', {'productos': productos, 'query': query})
 
-            avatar = Avatar(user=req.user, imagen=data["imagen"])
-
-            avatar.save()
-
-            return render(req, "inicio.html", {"mensaje": "Avatar actualizados con éxito!"})
-
-    else:
-        miFormulario = AvatarFormulario()
-        return render(req, "agregarAvatar.html", {"miFormulario": miFormulario})
-        
-    
+def detalle_producto(request, producto_id):
+    producto = get_object_or_404(Producto, pk=producto_id)
+    return render(request, 'detalle_producto.html', {'producto': producto})
 
 
-def buscar(req):
-    form = BusquedaProd(req.GET)
-    Resultados = []
 
-    if form.is_valid():
-        query = form.cleaned_data['query']
-        Resultados = Producto.objects.filter(titulo__icontains=query) 
 
-    return render(req, 'busqueda.html', {'form': form, 'results': Resultados})
+def detalle_producto(request, producto_id):
+    producto = get_object_or_404(Producto, pk=producto_id)
+    return render(request, 'detalle_producto.html', {'producto': producto})
 
 
 

@@ -16,13 +16,12 @@ urlpatterns = [
     path('cursos', cursos, name="Cursos"),
     path('productos', todos_productos, name="Productos"),
     #path('crea_producto', crea_producto, name ="CrearProd"),
-    #path('list_prod', list_prod, name ="ListProd"),
     path('login/', inicio_sesion, name="Login"),
     path('register/', registro, name="Registrar"),
     path('logout/', cerrar_sesion, name="Logout"),
     path('eliminar_cuenta/', eliminar_cuenta, name='eliminar_cuenta'),
     path('editar-pefil/', editar_perfil, name="EditarPefil"),
-    path('agregar-avatar/', agregar_avatar, name="AgregarAvatar"),
+   # path('agregar-avatar/', agregar_avatar, name="AgregarAvatar"),
     path('about/', about, name="About"),
     path('contacto/', contacto, name='Contacto'),
     path('buscar/', buscar, name="Buscar"),
@@ -38,7 +37,11 @@ urlpatterns = [
     path('agregar_producto/', agregar_producto, name="AgregaProd"),
     path('listar_productos/', listar_productos, name='ListProd'),
     path('eliminar_producto/<int:producto_id>/', eliminar_producto, name='eliminar_producto'),
+    path('detalle_producto/<int:producto_id>/',detalle_producto, name='detalle_producto'),
+
 
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+

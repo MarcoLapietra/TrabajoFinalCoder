@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 
 
 class Cliente(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,  null=True)
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     nombre = models.CharField(max_length=50)
     email=models.EmailField(default=None, blank=True, null=True)
 
@@ -15,14 +17,17 @@ class Cliente(models.Model):
    
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
+   
 
 
 
 
-class Avatar(models.Model):
+# class Avatar(models.Model):
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    imagen = models.ImageField(upload_to='avatares', blank=True, null=True)
+#     user = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+#     imagen = models.ImageField(upload_to='avatares', blank=True, null=True)
 
 
 

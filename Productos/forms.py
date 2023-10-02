@@ -17,3 +17,7 @@ class ProductoForm(forms.ModelForm):
         model = Producto
         fields = ['titulo', 'descripcion', 'precio', 'imagen']
 
+
+
+        
+

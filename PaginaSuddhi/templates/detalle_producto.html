@@ -1,4 +1,8 @@
 {% extends 'padre.html' %}
+
+
+
+
 {% load static %}
 
 
@@ -26,7 +30,7 @@
         }
 
         img {
-            max-width: 100%;
+            max-width: 30%;
             height: auto;
         }
 
@@ -38,14 +42,15 @@
 </head>
 <body>
     <header>
-        <h1>Curso Tinturas madre</h1>
-        <p>	</p>
-        <img src="{% static 'images/Tinturas.jpg' %}" alt="Lubricante natural">
-        <p></p>
+        <h1>{{ producto.titulo }}</h1>
+        <img src="{{ producto.imagen.url }}" alt="{{ producto.titulo }}">
+        <p>{{ producto.descripcion }}</p>
+        <p>Precio: ${{ producto.precio }}</p>
         {% if user.is_authenticated %}
         <a href="https://wa.me/+541139304608" target="_blank">
             <img class="whatsapp-logo" src="{% static 'images/whatsapp-logo.png' %}" alt="Logo de WhatsApp">
         </a>
         {% endif %}
+    
     
 {% endblock contenidoQueCambia %}
