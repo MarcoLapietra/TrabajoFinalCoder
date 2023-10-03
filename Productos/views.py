@@ -15,13 +15,15 @@ from Productos.views import *
 from Productos.models import *
 from .forms import *
 from PaginaSuddhi.models import Cliente
+from django.contrib.auth.decorators import user_passes_test
+from django.http import HttpResponseForbidden
 
 
 # Create your views here.
 
     
 
-
+@staff_member_required
 def agregar_producto(request):
     if not request.user.is_authenticated or not request.user:
         

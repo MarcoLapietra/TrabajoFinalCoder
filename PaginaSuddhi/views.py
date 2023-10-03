@@ -22,6 +22,7 @@ from .forms import *
 #
 
 
+
 def registro(request):
     if request.method == 'POST':
         user_form = RegistroForm(request.POST)
