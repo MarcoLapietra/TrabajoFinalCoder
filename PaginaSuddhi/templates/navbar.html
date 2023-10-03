@@ -11,10 +11,11 @@
                 <!-- <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'CuidadoCorporal' %}">Cuidado corporal</a></li> -->
                 <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'Tinturas' %}">Tinturas madre</a></li>
                 <!-- <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'Cursos' %}">Cursos</a></li> -->
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'Contacto' %}">Contacto</a></li>
+                {% comment %} <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'Contacto' %}">Contacto</a></li> {% endcomment %}
                 <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'ListProd' %}">Todos los productos</a></li>
                 {% if user.is_authenticated and request.user.is_superuser %}
                 <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'AgregaProd' %}">Agregar Producto</a></li>
+                {% comment %} <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'admin_contact_requests' %}">Mensajes de contacto</a></li> {% endcomment %}
                 {% endif %}
                 <li class="nav-item dropdown">
                     <!-- <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Comprar</a>

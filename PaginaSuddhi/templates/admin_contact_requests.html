@@ -1,0 +1,12 @@
+{% extends 'padre.html' %}
+
+{% block contenidoQueCambia %}
+<h1>Mensajes de Contacto</h1>
+<ul>
+    {% for request in contact_requests %}
+    <li>{{ request.user.username }} - {{ request.subject }} - {{ request.message }}</li>
+    {% empty %}
+        <li>No hay mensajes de contacto disponibles.</li>
+    {% endfor %}
+</ul>
+{% endblock contenidoQueCambia %}

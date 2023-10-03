@@ -72,15 +72,10 @@ class BusquedaProductoForm(forms.Form):
 
 
 class ContactForm(forms.Form):
-    subject = forms.CharField(max_length=100)
-    message = forms.CharField(widget=forms.Textarea)
+    nombre = forms.CharField(max_length=100, required=True, label='Nombre')
+    correo = forms.EmailField(required=True, label='Correo Electrónico')
+    telefono = forms.CharField(max_length=15, required=True, label='Número de Teléfono')
+    subject = forms.CharField(max_length=100, required=True, label='Asunto')
+    message = forms.CharField(widget=forms.Textarea, required=True, label='Mensaje')
 
 
-
-
-
-# class AvatarFormulario(forms.ModelForm):
-
-#     class Meta:
-#         model = Avatar
-#         fields = ("imagen",)

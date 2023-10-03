@@ -36,9 +36,9 @@ urlpatterns = [
     path('listar_productos/', listar_productos, name='ListProd'),
     path('eliminar_producto/<int:producto_id>/', eliminar_producto, name='eliminar_producto'),
     path('detalle_producto/<int:producto_id>/',detalle_producto, name='detalle_producto'),
-    #path('agregarAvatar/',agregar_avatar, name='agregarAvatar'),
     path('editar_producto/<int:producto_id>/', editar_producto, name='editar_producto'),
     path('avatar/', include('avatar.urls')),
+    path('admin_contact_requests/', admin_ver_mensajes_de_contacto, name='admin_contact_requests'),
 
 
 ]

@@ -5,7 +5,7 @@ from django.views.generic.edit import DeleteView, UpdateView, CreateView
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -106,33 +106,6 @@ def eliminar_cuenta(request):
 
 
 
-# def agregar_avatar(req):
-
-#     if req.method == 'POST':
-
-#         miFormulario = AvatarFormulario(req.POST, req.FILES)
-
-#         if miFormulario.is_valid():
-            
-#             data = miFormulario.cleaned_data
-
-#             avatar = Avatar(user=req.user, imagen=data["imagen"])
-
-#             avatar.save()
-
-#             return render(req, "inicio.html", {"mensaje": "Avatar actualizados con éxito!"})
-
-#     else:
-#         miFormulario = AvatarFormulario()
-#         return render(req, "agregarAvatar.html", {"miFormulario": miFormulario})
-     
-    
-
-#
-
-#
-#Renders 
-#
 
 
 
@@ -196,24 +169,42 @@ def detalle_producto(request, producto_id):
 
 @login_required
 def contacto(req):
-    if not req.user.is_authenticated:
-        return redirect('login.html') 
-
     if req.method == 'POST':
         form = ContactForm(req.POST)
         if form.is_valid():
+            nombre = form.cleaned_data['nombre']
+            correo = form.cleaned_data['correo']
+            telefono = form.cleaned_data['telefono']
             subject = form.cleaned_data['subject']
             message = form.cleaned_data['message']
-            ContactRequest.objects.create(user=req.user, subject=subject, message=message)
-            messages.success(req, 'Tu solicitud de contacto a sido enviada de forma exitosa.')
-            return redirect('contact.html')
-
+            
+            ContactRequest.objects.create(
+                user=req.user,
+                nombre=nombre,
+                correo=correo,
+                telefono=telefono,
+                subject=subject,
+                message=message
+            )
+            messages.success(req, 'Tu solicitud de contacto ha sido enviada de forma exitosa.')
+            return redirect('Contacto')
     else:
         form = ContactForm()
 
     return render(req, 'contact.html', {'form': form})
 
 
+
+
+
+def is_admin(user):
+    return user.is_authenticated and user.is_staff
+
+
+@user_passes_test(is_admin, login_url='login.html')
+def admin_ver_mensajes_de_contacto(req):
+    contact_requests = ContactRequest.objects.all()
+    return render(req, 'admin_contact_requests.html', {'contact_requests': contact_requests})
 
 
 
